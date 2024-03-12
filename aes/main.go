@@ -1,25 +1,24 @@
 package main
 
 import (
-	"crypto/des"
+	"crypto/aes"
 	"log"
 )
 
 func main() {
-	key := []byte("secretsa")
-
-	cb, err := des.NewCipher(key)
+	key := "1234567890123456" // 16bit
+	cb, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pt := []byte("plaintxt")
+	pt := []byte("hellohellohellohelloh") // 126bit
+	et := make([]byte, aes.BlockSize)
 
-	et := make([]byte, des.BlockSize)
 	cb.Encrypt(et, pt)
 	log.Printf("暗号化した値は%s", et)
 
-	dt := make([]byte, des.BlockSize)
+	dt := make([]byte, aes.BlockSize)
 	cb.Decrypt(dt, et)
 	log.Printf("復号した値は%s", dt)
 }
